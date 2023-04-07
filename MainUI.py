@@ -47,6 +47,7 @@ class Ui_MainWindow(QWidget):
     def uploadImage(self):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
         Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
+        self.reset()
         self.viewOriginal_checkbox.setEnabled(True)
         # self.compress_button.setEnabled(True)
         self.brightness_control.setEnabled(True)
@@ -65,6 +66,7 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setValue(0)
         self.contrast_control.setValue(10)
         self.sharpening_control.setValue(0)
+        self.blurrness_control.setValue(0)
         pass       
      
     def viewOriginal(self):
