@@ -6,6 +6,7 @@ import sys
 import cv2
 import copy
 from Operations import *
+import datetime
 
 
 def resizeToView(img,size = (500,500)):
@@ -33,7 +34,7 @@ class Ui_MainWindow(QWidget):
 
     def save_image(self):
         try:
-            res_name = QFileDialog.getSaveFileName(self, 'Save Image',"c:\\","Image Files (*.jpg *png *jpeg)")
+            res_name = QFileDialog.getSaveFileName(self, f'Save Image',"c:\\Processed Image\\download.jpg","Image Files (*.jpg *png *jpeg)")
             cv2.imwrite(res_name[0],Ui_MainWindow.res_img)
             QMessageBox.information(self,"Download Status", "Download Success!!")
         except:
@@ -43,7 +44,7 @@ class Ui_MainWindow(QWidget):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
         Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
         self.viewOriginal_checkbox.setEnabled(True)
-        self.compress_button.setEnabled(True)
+        # self.compress_button.setEnabled(True)
         self.brightness_control.setEnabled(True)
         self.contrast_control.setEnabled(True)
         self.sharpening_control.setEnabled(True)
