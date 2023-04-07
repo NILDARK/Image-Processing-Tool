@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 import sys
 import cv2
 import copy
-
+from Operations import *
 def resizeToView(img,size = (500,500)):
     org_img =cv2.resize(img,size)
     height, width, channel = org_img.shape
@@ -15,6 +15,7 @@ def resizeToView(img,size = (500,500)):
 class Ui_MainWindow(QWidget):
     tmp_img = None
     org_img = None
+    res_img = None
     def browseImage(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file','c:\\',"Image files (*.jpg *.png *.jpeg)")
         org_img = cv2.imread(fname[0])
@@ -23,9 +24,14 @@ class Ui_MainWindow(QWidget):
         
     def uploadImage(self):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
+        Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
         self.viewOriginal_checkbox.setEnabled(True)
         self.compress_button.setEnabled(True)
+        self.brightness_control.setEnabled(True)
+        self.contrast_control.setEnabled(True)
+        self.sharpening_control.setEnabled(True)
         self.viewOriginal()
+
     def viewOriginal(self):
         if self.viewOriginal_checkbox.isChecked():
             org_img = resizeToView(Ui_MainWindow.org_img)
@@ -33,6 +39,14 @@ class Ui_MainWindow(QWidget):
             self.original_image.setPixmap(QPixmap(org_img))
         else:
             self.original_box.setVisible(False)
+    def processImage(self):
+        factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value())
+        Ui_MainWindow.res_img = color_brightness(Ui_MainWindow.org_img,factor[0]/10)
+        Ui_MainWindow.res_img = color_contrast(Ui_MainWindow.res_img,factor[1]/10)
+        Ui_MainWindow.res_img = color_sharpening(Ui_MainWindow.res_img,factor[2]/10)
+        res_img = resizeToView(Ui_MainWindow.res_img)
+        self.resultant_image.setPixmap(QPixmap(res_img))
+        pass
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(456, 345)
@@ -150,6 +164,21 @@ class Ui_MainWindow(QWidget):
         self.reset_button.setEnabled(False)
         self.compress_button.setEnabled(False)
         self.upload_button.clicked.connect(self.uploadImage)
+        self.brightness_control.setMinimum(-10)
+        self.brightness_control.setMaximum(10)
+        self.brightness_control.setSingleStep(1)
+        self.brightness_control.valueChanged.connect(self.processImage)
+        self.contrast_control.setMinimum(-10)
+        self.contrast_control.setMaximum(10)
+        self.contrast_control.setSingleStep(1)
+        self.contrast_control.valueChanged.connect(self.processImage)
+        self.sharpening_control.setMinimum(-10)
+        self.sharpening_control.setMaximum(10)
+        self.sharpening_control.setSingleStep(1)
+        self.sharpening_control.valueChanged.connect(self.processImage)
+        self.brightness_control.setEnabled(False)
+        self.contrast_control.setEnabled(False)
+        self.sharpening_control.setEnabled(False)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

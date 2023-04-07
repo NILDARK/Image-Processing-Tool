@@ -5,7 +5,7 @@ import cv2
 
 #Adjust Brightness
 
-def brightness(image, brightness_factor):
+def color_brightness(image, brightness_factor):
     b, g, r = cv2.split(image)
 
     b = cv2.add(b, 255 * brightness_factor)
