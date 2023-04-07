@@ -24,22 +24,26 @@ class Ui_MainWindow(QWidget):
     tmp_file = None
 
     def browseImage(self):
+        self.setEnabled(False)
         fname = QFileDialog.getOpenFileName(self, 'Open file','c:\\',"Image files (*.jpg *.png *.jpeg)")
-        org_img = cv2.imread(fname[0])
-        x = fname[0].rindex('/')
-        Ui_MainWindow.tmp_file = fname[0][x+1:]
-        self.selected_file_label.setText(Ui_MainWindow.tmp_file)
-        Ui_MainWindow.tmp_img = copy.deepcopy(org_img)
-        self.upload_button.setEnabled(True)
-
+        self.setEnabled(True)
+        if(fname[0]!=''):
+            org_img = cv2.imread(fname[0])
+            x = fname[0].rindex('/')
+            Ui_MainWindow.tmp_file = fname[0][x+1:]
+            self.selected_file_label.setText(Ui_MainWindow.tmp_file)
+            Ui_MainWindow.tmp_img = copy.deepcopy(org_img)
+            self.upload_button.setEnabled(True)
     def save_image(self):
+        self.setEnabled(False)
         try:
             res_name = QFileDialog.getSaveFileName(self, f'Save Image',"c:\\Processed Image\\download.jpg","Image Files (*.jpg *png *jpeg)")
-            cv2.imwrite(res_name[0],Ui_MainWindow.res_img)
-            QMessageBox.information(self,"Download Status", "Download Success!!")
+            if(res_name[0]!=''):
+                cv2.imwrite(res_name[0],Ui_MainWindow.res_img)
+                QMessageBox.information(self,"Download Status", "Download Success!!")
         except:
             QMessageBox.critical(self,"Download Status", "Download Failed. Might be due to extension error.")
-
+        self.setEnabled(True)
     def uploadImage(self):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
         Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
@@ -264,6 +268,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
+    app.setStyle("Fusion")
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
