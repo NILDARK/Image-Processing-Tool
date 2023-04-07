@@ -6,16 +6,21 @@ import sys
 import cv2
 import copy
 from Operations import *
+
+
 def resizeToView(img,size = (500,500)):
     org_img =cv2.resize(img,size)
     height, width, channel = org_img.shape
     bytesPerLine = 3 * width
     qImg = QImage(org_img, width, height, bytesPerLine, QImage.Format_BGR888)
     return qImg
+
+
 class Ui_MainWindow(QWidget):
     tmp_img = None
     org_img = None
     res_img = None
+
     def browseImage(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file','c:\\',"Image files (*.jpg *.png *.jpeg)")
         org_img = cv2.imread(fname[0])
@@ -40,6 +45,7 @@ class Ui_MainWindow(QWidget):
             self.original_image.setPixmap(QPixmap(org_img))
         else:
             self.original_box.setVisible(False)
+
     def processImage(self):
         factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value())
         Ui_MainWindow.res_img = color_brightness(Ui_MainWindow.org_img,factor[0]/10)
@@ -48,6 +54,7 @@ class Ui_MainWindow(QWidget):
         res_img = resizeToView(Ui_MainWindow.res_img)
         self.resultant_image.setPixmap(QPixmap(res_img))
         pass
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(456, 345)
@@ -99,7 +106,7 @@ class Ui_MainWindow(QWidget):
         self.verticalLayout.setObjectName("verticalLayout")
         self.resultant_image = QtWidgets.QLabel(self.resultant_box)
         self.resultant_image.setObjectName("resultant_image")
-        self.verticalLayout.addWidget(self.resultant_image)
+        self.verticalLayout.addWidget(self.resultant_image)    
         self.widget_4 = QtWidgets.QWidget(self.resultant_box)
         self.widget_4.setObjectName("widget_4")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_4)
