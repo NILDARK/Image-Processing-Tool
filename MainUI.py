@@ -30,6 +30,7 @@ class Ui_MainWindow(QWidget):
         self.selected_file_label.setText(Ui_MainWindow.tmp_file)
         Ui_MainWindow.tmp_img = copy.deepcopy(org_img)
         self.upload_button.setEnabled(True)
+
     def save_image(self):
         try:
             res_name = QFileDialog.getSaveFileName(self, 'Save Image',"c:\\","Image Files (*.jpg *png *jpeg)")
@@ -37,6 +38,7 @@ class Ui_MainWindow(QWidget):
             QMessageBox.information(self,"Download Status", "Download Success!!")
         except:
             QMessageBox.critical(self,"Download Status", "Download Failed. Might be due to extension error.")
+
     def uploadImage(self):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
         Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
@@ -72,7 +74,13 @@ class Ui_MainWindow(QWidget):
         factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value())
         Ui_MainWindow.res_img = color_brightness(Ui_MainWindow.org_img,factor[0]/10)
         Ui_MainWindow.res_img = color_contrast(Ui_MainWindow.res_img,factor[1]/10)
-        Ui_MainWindow.res_img = color_sharpening(Ui_MainWindow.res_img,1.05**factor[2])
+
+        if factor[2]==0:
+            Ui_MainWindow.res_img = color_sharpening(Ui_MainWindow.res_img,0)
+
+        else:
+            Ui_MainWindow.res_img = color_sharpening(Ui_MainWindow.res_img,1.05**factor[2])
+            
         res_img = resizeToView(Ui_MainWindow.res_img)
         self.resultant_image.setPixmap(QPixmap(res_img))
         pass
@@ -216,6 +224,7 @@ class Ui_MainWindow(QWidget):
         self.contrast_control.valueChanged.connect(self.processImage)
         self.sharpening_control.setMinimum(0)
         self.sharpening_control.setMaximum(100)
+        self.sharpening_control.setValue(0)
         self.sharpening_control.setSingleStep(1)
         self.sharpening_control.valueChanged.connect(self.processImage)
         self.brightness_control.setEnabled(False)
