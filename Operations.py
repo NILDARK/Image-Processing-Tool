@@ -38,18 +38,17 @@ def color_contrast(image, amount):
 # Adjust Sharpening
 
 def color_sharpening(image, amount):
-    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)        # Convert image to LAB color space
-    
-    l, a, b = cv2.split(lab)                            # Split LAB channels
-    
-    # Apply unsharp masking to the L channel
-    blurred_l = cv2.GaussianBlur(l, (0, 0), 3)         
-    sharp_l = cv2.addWeighted(l, 1 + amount, blurred_l, -amount, 0)
-    
-    lab_sharp = cv2.merge((sharp_l, a, b))              # Merge LAB channels back to LAB image
-    
-    sharp_image = cv2.cvtColor(lab_sharp, cv2.COLOR_LAB2BGR)    # Convert LAB image back to BGR
-    
-    sharp_image = np.clip(sharp_image, 0, 255).astype(np.uint8) # Clip pixel values to 0-255
+    b, g, r = cv2.split(image)
 
-    return np.asarray(sharp_image, np.uint8)
+    blurred_b = cv2.GaussianBlur(b, (0, 0), 3)
+    sharp_b = cv2.addWeighted(b, 1 + amount, blurred_b, -amount, 0)
+
+    blurred_g = cv2.GaussianBlur(g, (0, 0), 3)
+    sharp_g = cv2.addWeighted(g, 1 + amount, blurred_g, -amount, 0)
+
+    blurred_r = cv2.GaussianBlur(r, (0, 0), 3)
+    sharp_r = cv2.addWeighted(r, 1 + amount, blurred_r, -amount, 0)
+
+    lab_sharp = cv2.merge((sharp_b, sharp_g, sharp_r))
+
+    return lab_sharp
