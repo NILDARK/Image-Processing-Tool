@@ -53,6 +53,7 @@ class Ui_MainWindow(QWidget):
         self.contrast_control.setEnabled(True)
         self.sharpening_control.setEnabled(True)
         self.download_button.setEnabled(True)
+        self.blurrness_control.setEnabled(True)
         QMessageBox.information(self,"Upload Status","Upload Success!!")
         self.viewOriginal()
         self.processImage()
@@ -76,10 +77,10 @@ class Ui_MainWindow(QWidget):
 
     def processImage(self):
         self.reset_button.setEnabled(True)
-        factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value())
+        factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value(),self.blurrness_control.value())
         Ui_MainWindow.res_img = color_brightness(Ui_MainWindow.org_img,factor[0]/10)
         Ui_MainWindow.res_img = color_contrast(Ui_MainWindow.res_img,factor[1]/10)
-
+        Ui_MainWindow.res_img = colour_blurring(Ui_MainWindow.res_img,factor[3]*2+1)
         if factor[2]==0:
             Ui_MainWindow.res_img = color_sharpening(Ui_MainWindow.res_img,0)
 
@@ -167,6 +168,24 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setObjectName("brightness_control")
         self.horizontalLayout_5.addWidget(self.brightness_control)
         self.verticalLayout.addWidget(self.widget_4)
+        
+        self.widget_8 = QtWidgets.QWidget(self.resultant_box)
+        self.widget_8.setObjectName("widget_8")
+        
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget_8)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.blurrness_label = QtWidgets.QLabel(self.widget_8)
+        self.blurrness_label.setObjectName("blurrness_label")
+        self.blurrness_label.setText("Blurrness")
+        self.horizontalLayout_9.addWidget(self.blurrness_label)
+        spacerItem5 = QtWidgets.QSpacerItem(153, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem5)
+        self.blurrness_control = QtWidgets.QSlider(self.widget_8)
+        self.blurrness_control.setOrientation(QtCore.Qt.Horizontal)
+        self.blurrness_control.setObjectName("blurrness_control")
+        self.horizontalLayout_9.addWidget(self.blurrness_control)
+        self.verticalLayout.addWidget(self.widget_8)
+        
         self.widget_5 = QtWidgets.QWidget(self.resultant_box)
         self.widget_5.setObjectName("widget_5")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.widget_5)
@@ -222,6 +241,10 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setMaximum(10)
         self.brightness_control.setSingleStep(1)
         self.brightness_control.valueChanged.connect(self.processImage)
+        self.blurrness_control.setMinimum(0)
+        self.blurrness_control.setMaximum(49)
+        self.blurrness_control.setSingleStep(1)
+        self.blurrness_control.valueChanged.connect(self.processImage)
         self.contrast_control.setMinimum(0)
         self.contrast_control.setMaximum(20)
         self.contrast_control.setValue(10)
@@ -235,6 +258,7 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setEnabled(False)
         self.contrast_control.setEnabled(False)
         self.sharpening_control.setEnabled(False)
+        self.blurrness_control.setEnabled(False)
         self.reset_button.clicked.connect(self.reset)
         self.download_button.clicked.connect(self.save_image)
         self.compress_button.setEnabled(False)
