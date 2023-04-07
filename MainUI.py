@@ -29,7 +29,13 @@ class Ui_MainWindow(QWidget):
         self.selected_file_label.setText(Ui_MainWindow.tmp_file)
         Ui_MainWindow.tmp_img = copy.deepcopy(org_img)
         self.upload_button.setEnabled(True)
-        
+    def save_image(self):
+        try:
+            res_name = QFileDialog.getSaveFileName(self, 'Save Image',"c:\\","Image Files (*.jpg *png *jpeg)")
+            cv2.imwrite(res_name[0],Ui_MainWindow.res_img)
+            QMessageBox.information(self,"Download Status", "Download Success!!")
+        except:
+            QMessageBox.critical(self,"Download Status", "Download Failed. Might be due to extension error.")
     def uploadImage(self):
         Ui_MainWindow.org_img = copy.deepcopy(Ui_MainWindow.tmp_img)
         Ui_MainWindow.res_img = copy.deepcopy(Ui_MainWindow.org_img)
@@ -38,6 +44,7 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setEnabled(True)
         self.contrast_control.setEnabled(True)
         self.sharpening_control.setEnabled(True)
+        self.download_button.setEnabled(True)
         QMessageBox.information(self,"Upload Status","Upload Success!!")
         self.viewOriginal()
         self.processImage()
@@ -201,13 +208,15 @@ class Ui_MainWindow(QWidget):
         self.contrast_control.setEnabled(False)
         self.sharpening_control.setEnabled(False)
         self.reset_button.clicked.connect(self.reset)
+        self.download_button.clicked.connect(self.save_image)
+        self.compress_button.setEnabled(False)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Image Processing Tool"))
-        self.selected_file_label.setText(_translate("MainWindow", "File Name"))
+        self.selected_file_label.setText(_translate("MainWindow", "No File Selected"))
         self.browse_button.setToolTip(_translate("MainWindow", "Click to select image"))
         self.browse_button.setText(_translate("MainWindow", "Browse"))
         self.upload_button.setToolTip(_translate("MainWindow", "Upload Image"))
@@ -216,9 +225,9 @@ class Ui_MainWindow(QWidget):
         self.viewOriginal_checkbox.setText(_translate("MainWindow", "View Original"))
         self.viewOriginal_checkbox.stateChanged.connect(self.viewOriginal)
         self.original_box.setTitle(_translate("MainWindow", "Original"))
-        self.original_image.setText(_translate("MainWindow", "image"))
+        self.original_image.setText(_translate("MainWindow", "No Image Selected"))
         self.resultant_box.setTitle(_translate("MainWindow", "Result"))
-        self.resultant_image.setText(_translate("MainWindow", "image"))
+        self.resultant_image.setText(_translate("MainWindow", "No Image Selected"))
         self.brightness_label.setText(_translate("MainWindow", "Brightness"))
         self.contrast_label.setText(_translate("MainWindow", "Contrast"))
         self.sharpening_label.setText(_translate("MainWindow", "Sharpening"))
