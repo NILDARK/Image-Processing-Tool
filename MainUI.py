@@ -16,10 +16,13 @@ class Ui_MainWindow(QWidget):
     tmp_img = None
     org_img = None
     res_img = None
+    tmp_file = None
     def browseImage(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file','c:\\',"Image files (*.jpg *.png *.jpeg)")
         org_img = cv2.imread(fname[0])
-        # fname[::-1].find('/')
+        x = fname[0].rindex('/')
+        Ui_MainWindow.tmp_file = fname[0][x+1:]
+        self.selected_file_label.setText(Ui_MainWindow.tmp_file)
         Ui_MainWindow.tmp_img = copy.deepcopy(org_img)
         self.upload_button.setEnabled(True)
         
@@ -31,8 +34,17 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setEnabled(True)
         self.contrast_control.setEnabled(True)
         self.sharpening_control.setEnabled(True)
+        QMessageBox.information(self,"Upload Status","Upload Success!!")
         self.viewOriginal()
-
+        self.processImage()
+    def reset(self):
+        Ui_MainWindow.res_img = Ui_MainWindow.org_img
+        org_img = resizeToView(Ui_MainWindow.org_img)
+        self.resultant_image.setPixmap(QPixmap(org_img))
+        self.brightness_control.setValue(0)
+        self.contrast_control.setValue(10)
+        self.sharpening_control.setValue(0)
+        pass        
     def viewOriginal(self):
         if self.viewOriginal_checkbox.isChecked():
             org_img = resizeToView(Ui_MainWindow.org_img)
@@ -41,6 +53,7 @@ class Ui_MainWindow(QWidget):
         else:
             self.original_box.setVisible(False)
     def processImage(self):
+        self.reset_button.setEnabled(True)
         factor = (self.brightness_control.value(),self.contrast_control.value(),self.sharpening_control.value())
         Ui_MainWindow.res_img = color_brightness(Ui_MainWindow.org_img,factor[0]/10)
         Ui_MainWindow.res_img = color_contrast(Ui_MainWindow.res_img,factor[1]/10)
@@ -181,6 +194,7 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setEnabled(False)
         self.contrast_control.setEnabled(False)
         self.sharpening_control.setEnabled(False)
+        self.reset_button.clicked.connect(self.reset)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
