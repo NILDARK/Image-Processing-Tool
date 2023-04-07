@@ -60,9 +60,9 @@ def colour_blurring(image,kernel_size):
     # Split the image into RGB channels
     b, g, r = cv2.split(image)
 
-    b_blur = cv2.GaussianBlur(b, (kernel_size,kernel_size), 0)
-    g_blur = cv2.GaussianBlur(g, (kernel_size,kernel_size), 0)
-    r_blur = cv2.GaussianBlur(r, (kernel_size,kernel_size), 0)
+    b_blur = cv2.medianBlur(b, kernel_size)
+    g_blur = cv2.medianBlur(g, kernel_size)
+    r_blur = cv2.medianBlur(r, kernel_size)
 
     # Merge the blurred channels back into an RGB image
     blurred_image = cv2.merge((b_blur, g_blur, r_blur))
