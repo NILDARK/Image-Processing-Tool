@@ -52,3 +52,19 @@ def color_sharpening(image, amount):
     lab_sharp = cv2.merge((sharp_b, sharp_g, sharp_r))
 
     return lab_sharp
+
+
+#Adjust Blurring
+
+def colour_blurring(image,kernel_size):
+    # Split the image into RGB channels
+    b, g, r = cv2.split(image)
+
+    b_blur = cv2.GaussianBlur(b, (kernel_size,kernel_size), 0)
+    g_blur = cv2.GaussianBlur(g, (kernel_size,kernel_size), 0)
+    r_blur = cv2.GaussianBlur(r, (kernel_size,kernel_size), 0)
+
+    # Merge the blurred channels back into an RGB image
+    blurred_image = cv2.merge((b_blur, g_blur, r_blur))
+
+    return blurred_image

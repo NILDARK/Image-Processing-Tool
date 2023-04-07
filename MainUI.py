@@ -21,6 +21,7 @@ class Ui_MainWindow(QWidget):
     org_img = None
     res_img = None
     tmp_file = None
+
     def browseImage(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file','c:\\',"Image files (*.jpg *.png *.jpeg)")
         org_img = cv2.imread(fname[0])
@@ -48,6 +49,7 @@ class Ui_MainWindow(QWidget):
         QMessageBox.information(self,"Upload Status","Upload Success!!")
         self.viewOriginal()
         self.processImage()
+
     def reset(self):
         Ui_MainWindow.res_img = Ui_MainWindow.org_img
         org_img = resizeToView(Ui_MainWindow.org_img)
@@ -55,7 +57,8 @@ class Ui_MainWindow(QWidget):
         self.brightness_control.setValue(0)
         self.contrast_control.setValue(10)
         self.sharpening_control.setValue(0)
-        pass        
+        pass       
+     
     def viewOriginal(self):
         if self.viewOriginal_checkbox.isChecked():
             org_img = resizeToView(Ui_MainWindow.org_img)
