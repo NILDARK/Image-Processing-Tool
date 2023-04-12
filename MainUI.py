@@ -229,7 +229,7 @@ class Ui_MainWindow(QWidget):
         self.horizontalLayout_3.addItem(spacerItem4)
         self.compress_button = QtWidgets.QPushButton(self.widget_3)
         self.compress_button.setObjectName("compress_button")
-        self.horizontalLayout_3.addWidget(self.compress_button)
+        # self.horizontalLayout_3.addWidget(self.compress_button)
         self.download_button = QtWidgets.QPushButton(self.widget_3)
         self.download_button.setObjectName("download_button")
         self.horizontalLayout_3.addWidget(self.download_button)
