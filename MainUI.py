@@ -6,7 +6,6 @@ import sys
 import cv2
 import copy
 from Operations import *
-import datetime
 
 
 def resizeToView(img,size = (500,500)):
@@ -95,7 +94,7 @@ class Ui_MainWindow(QWidget):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(456, 345)
+        MainWindow.resize(1200, 800)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
