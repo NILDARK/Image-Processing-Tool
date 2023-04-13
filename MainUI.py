@@ -7,7 +7,6 @@ import cv2
 import copy
 from Operations import *
 
-
 def resizeToView(img,size = (500,500)):
     org_img =cv2.resize(img,size)
     height, width, channel = org_img.shape
